@@ -3,6 +3,7 @@ dotenv.config();
 
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
 app.use(cors());
@@ -16,6 +17,8 @@ const userRoutes=require("./routes/user.routes");
 app.get("/",(req,res)=>{
     res.send("Hello World");
 })
+
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

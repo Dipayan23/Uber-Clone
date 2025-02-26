@@ -65,6 +65,28 @@ The server will start on port 4000 by default.
   - `200 OK`: User successfully logged in.
   - `400 Bad Request`: Validation error or incorrect credentials.
 
+### Profile
+
+- **URL:** `/user/profile`
+- **Method:** `GET`
+- **Headers:**
+  - `Authorization` (string, required): Bearer token.
+
+- **Response:**
+  - `200 OK`: User profile data.
+  - `401 Unauthorized`: Invalid or missing token.
+
+### Logout
+
+- **URL:** `/user/logout`
+- **Method:** `POST`
+- **Headers:**
+  - `Authorization` (string, required): Bearer token.
+
+- **Response:**
+  - `200 OK`: Logout successful.
+  - `401 Unauthorized`: Invalid or missing token.
+
 ## Internal Implementation
 
 ### Directory Structure
@@ -132,4 +154,3 @@ The passwords are hashed using bcrypt before being stored in the database. The `
 2. **Controller:** The request is then passed to the `loginUser` method in the `user.controllers.js` file.
 3. **Service:** The controller calls the `loginUser` method in the `user.services.js` file, which checks if the user exists and if the password is correct.
 4. **Response:** If the user is successfully logged in, a `200 OK` response is returned with a JWT token. If there is a validation error or incorrect credentials, a `400 Bad Request` response is returned.
-
