@@ -87,6 +87,35 @@ The server will start on port 4000 by default.
   - `200 OK`: Logout successful.
   - `401 Unauthorized`: Invalid or missing token.
 
+### Captain Registration
+
+- **URL:** `/captain/register`
+- **Method:** `POST`
+- **Body Parameters:**
+  - `fullname.firstname` (string, required): Captain's first name.
+  - `fullname.lastname` (string, required): Captain's last name.
+  - `email` (string, required): Captain's email address.
+  - `password` (string, required): Captain's password.
+  - `vechile.color` (string, required): Vehicle color.
+  - `vechile.plate` (string, required): Vehicle plate number.
+  - `vechile.capacity` (number, required): Vehicle capacity.
+  - `vechile.vechileType` (string, required): Vehicle type (bike, car, auto).
+
+- **Response:**
+  - `201 Created`: Captain successfully registered.
+  - `400 Bad Request`: Validation error or missing fields.
+
+### Captain Logout
+
+- **URL:** `/captain/logout`
+- **Method:** `POST`
+- **Headers:**
+  - `Authorization` (string, required): Bearer token.
+
+- **Response:**
+  - `200 OK`: Logout successful.
+  - `401 Unauthorized`: Invalid or missing token.
+
 ## Internal Implementation
 
 ### Directory Structure

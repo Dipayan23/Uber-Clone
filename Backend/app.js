@@ -12,6 +12,7 @@ const connectToDB = require('./db/db');
 connectToDB();
 
 const userRoutes=require("./routes/user.routes");
+const captainRoutes = require("./routes/captain.routes");
 
 
 app.get("/",(req,res)=>{
@@ -23,5 +24,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use('/user',userRoutes);
+app.use('/captain',captainRoutes);
 
 module.exports = app;
