@@ -23,7 +23,7 @@ const UserSignUp = () => {
     setLastname('')
     setPassword('')
   }
-
+  
   return (
     <div>
       <div className='p-7 h-screen flex flex-col justify-between'>
