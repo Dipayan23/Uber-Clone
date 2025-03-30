@@ -5,16 +5,22 @@ const blacklistTokenModel = require("../models/blacklistToken.model");
 
 module.exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
+  console.log("Received Email:", req.body);
   if (!errors.isEmpty()) {
+    console.log("Validation Errors:", errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
 
   const { fullname, email, password } = req.body;
 
+  if (!fullname || !fullname.firstname || !fullname.lastname) {
+    return res.status(400).json({ message: "Full name is required with both first and last names" });
+  }
+
   const isUserAlready = await userModel.findOne({ email });
 
   if (isUserAlready) {
-    return res.status(400).json({ message: "User already exist" });
+    return res.status(400).json({ message: "User already exists" });
   }
 
   const hashedPassword = await userModel.hashPassword(password);
@@ -32,25 +38,41 @@ module.exports.registerUser = async (req, res, next) => {
 };
 
 module.exports.loginUser = async (req, res, next) => {
+  console.log("Received Request:", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log("Validation Errors:", errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
+
   const { email, password } = req.body;
 
-  const user = await userModel.findOne({ email }).select("+password"); //means when we query user from database we want to select the password field
-  if (!user) {
-    return res.status(401).json({ message: "Invalid email or password" });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
   }
-  const match = await user.comparePassword(password);
-  if (!match) {
-    return res.status(401).json({ message: "Invalid email or password" });
+
+  try {
+    const user = await userModel.findOne({ email }).select('+password');
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = user.generateAuthToken();
+
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+
+    res.status(200).json({ token, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
-  const token = user.generateAuthToken();
-
-  res.cookie("token", token);
-
-  res.status(200).json({ token, user });
 };
 
 module.exports.profileUser = async (req, res, next) => {
