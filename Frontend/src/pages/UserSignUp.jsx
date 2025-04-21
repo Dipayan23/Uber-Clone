@@ -17,17 +17,18 @@ const UserSignUp = () => {
 
   const sumitHandler = async (e)=>{
     e.preventDefault()
-    setUserData({
-      fullname:{
-        firstname:firstname,
-        lastname:lastname
-      },
-      email:email,
-      password:password
-    })
     //print(userData)
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,userData)
-    if(response.status === 200){
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,
+      {
+        fullname:{
+          firstname:firstname,
+          lastname:lastname
+        },
+        email:email,
+        password:password
+      }
+    )
+    if(response.status === 201){
       const data = response.data
       localStorage.setItem('token', data.token)
       setUser(data.user)

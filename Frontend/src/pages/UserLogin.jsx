@@ -21,14 +21,14 @@ const UserLogin = () => {
 
     // console.log(userData)
 
-    // console.log("Email:", email)
-    // console.log("Password:", password)
+    //console.log("Email:", email)
+    //console.log("Password:", password)
     // console.log("User Data:", userData)
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, {email, password});
 
-      // console.log("Response:", response.data)
+      console.log("Response:", response.data)
       // console.log("Status:", response.status)
 
       if (response.status === 200) {
@@ -38,7 +38,15 @@ const UserLogin = () => {
         navigate('/home')
       }
     } catch (error) {
-      console.error("Error logging in", error);
+      if (error.code === 'ERR_NETWORK') {
+        console.error("Network error:", error); // For debugging purposes
+        // Show a user-friendly error message to the user
+        alert("Connection error. Please check your internet connection or try again later.");
+      } else {
+        console.error("Error logging in:", error); // Detailed error for debugging
+        // Show a generic error message to the user
+        alert("An error occurred. Please try again.");
+      }
     }
 
     setEmail('')

@@ -38,14 +38,14 @@ module.exports.registerUser = async (req, res, next) => {
 };
 
 module.exports.loginUser = async (req, res, next) => {
-  console.log("Received Request:", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log("Validation Errors:", errors.array());
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(401).json({ errors: errors.array() });
   }
 
   const { email, password } = req.body;
+  //console.log("Email:", email);
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
@@ -66,7 +66,7 @@ module.exports.loginUser = async (req, res, next) => {
 
     const token = user.generateAuthToken();
 
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.cookie('token', token);
 
     res.status(200).json({ token, user });
   } catch (error) {
